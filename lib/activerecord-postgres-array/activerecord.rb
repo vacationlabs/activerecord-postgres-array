@@ -29,7 +29,7 @@ module ActiveRecord
   end
 
   module ConnectionAdapters
-    class PostgreSQLAdapter < AbstractAdapter
+    class PostgreSQLAdapter
       POSTGRES_ARRAY_TYPES = %w( string text integer float decimal datetime timestamp time date binary boolean )
 
       def native_database_types_with_array(*args)
@@ -84,9 +84,10 @@ module ActiveRecord
       end
     end
 
-    class PostgreSQLColumn < Column
+    class PostgreSQLColumn
       # Does the type casting from array columns using String#from_postgres_array or Array#from_postgres_array.
       def type_cast_code_with_array(var_name)
+        puts "called with #{var_name} / #{type.to_s}"
         if type.to_s =~ /_array$/
           base_type = type.to_s.gsub(/_array/, '')
           "#{var_name}.from_postgres_array(:#{base_type.parameterize('_')})"

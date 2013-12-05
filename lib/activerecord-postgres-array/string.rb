@@ -20,6 +20,7 @@ class String
 
   # Creates an array from a postgres array string that postgresql spits out.
   def from_postgres_array(base_type = :string)
+    puts "[from_postgres_array] called with #{self.to_s}"
     if empty?
       []
     else
@@ -27,7 +28,7 @@ class String
         when :decimal then Proc.new {|x| x.to_d }
         when :float then Proc.new {|x| x.to_f }
         when :integer then Proc.new {|x| x.to_i }
-        when :timestamp then Proc.new {|x| x.to_time.in_time_zone }
+        when :datetime then Proc.new {|x| x.to_time.in_time_zone }
         when :boolean then Proc.new {|x| x.downcase=='t' ? true : false }
         else Proc.new {|x| x }
       end

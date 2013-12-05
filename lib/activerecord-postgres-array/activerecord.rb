@@ -85,11 +85,19 @@ module ActiveRecord
     end
 
     class PostgreSQLColumn
+
+      def type_cast(*args)
+        puts "#{args.inspect} | #{@name} | #{@array} | #{@type}"
+        super
+      end
+
       # Does the type casting from array columns using String#from_postgres_array or Array#from_postgres_array.
       def type_cast_code_with_array(var_name)
-        puts "called with #{var_name} / #{type.to_s}"
-        if type.to_s =~ /_array$/
+        # puts "called with #{var_name} / #{type.to_s}/ #{type.class.name} / #{array?}"
+        puts "#{@name} / #{@type} / #{@sql_type} / #{@array}"
+        if array? or type.to_s =~ /_array$/
           base_type = type.to_s.gsub(/_array/, '')
+          puts "base_type ===> #{base_type}"
           "#{var_name}.from_postgres_array(:#{base_type.parameterize('_')})"
         else
           type_cast_code_without_array(var_name)
@@ -99,14 +107,15 @@ module ActiveRecord
 
       # Adds the array type for the column.
       def simplified_type_with_array(field_type)
+        puts "[simplified type with array] called with #{field_type}"
         if field_type =~ /^numeric.+\[\]$/
           :decimal_array
         elsif field_type =~ /character varying.*\[\]/
           :string_array
         elsif field_type =~ /^(?:real|double precision)\[\]$/
           :float_array
-        elsif field_type =~ /timestamp.*\[\]/
-          :timestamp_array
+        elsif field_type =~ /datetime.*\[\]/
+          :datetime_array
         elsif field_type =~ /\[\]$/
           field_type.gsub(/\[\]/, '_array').to_sym
         else

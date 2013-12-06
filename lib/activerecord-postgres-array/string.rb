@@ -20,7 +20,6 @@ class String
 
   # Creates an array from a postgres array string that postgresql spits out.
   def from_postgres_array(base_type = :string)
-    puts "[from_postgres_array] called with #{self.to_s}"
     if empty?
       []
     else

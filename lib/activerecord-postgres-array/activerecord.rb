@@ -86,11 +86,6 @@ module ActiveRecord
 
     class PostgreSQLColumn
 
-      def type_cast(*args)
-        puts "#{args.inspect} | #{@name} | #{@array} | #{@type}"
-        super
-      end
-
       # Does the type casting from array columns using String#from_postgres_array or Array#from_postgres_array.
       def type_cast_code_with_array(var_name)
         if type.to_s =~ /_array$/ #or array?

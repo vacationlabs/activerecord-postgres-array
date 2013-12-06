@@ -93,11 +93,8 @@ module ActiveRecord
 
       # Does the type casting from array columns using String#from_postgres_array or Array#from_postgres_array.
       def type_cast_code_with_array(var_name)
-        # puts "called with #{var_name} / #{type.to_s}/ #{type.class.name} / #{array?}"
-        puts "#{@name} / #{@type} / #{@sql_type} / #{@array}"
-        if array? or type.to_s =~ /_array$/
+        if type.to_s =~ /_array$/ #or array?
           base_type = type.to_s.gsub(/_array/, '')
-          puts "base_type ===> #{base_type}"
           "#{var_name}.from_postgres_array(:#{base_type.parameterize('_')})"
         else
           type_cast_code_without_array(var_name)

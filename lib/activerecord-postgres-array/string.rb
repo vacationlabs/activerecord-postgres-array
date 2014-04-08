@@ -27,6 +27,7 @@ class String
         when :decimal then Proc.new {|x| x.to_d }
         when :float then Proc.new {|x| x.to_f }
         when :integer then Proc.new {|x| x.to_i }
+        when :timestamp_without_time_zone then Proc.new {|x| x.to_time.in_time_zone }
         when :datetime then Proc.new {|x| x.to_time.in_time_zone }
         when :boolean then Proc.new {|x| x.downcase=='t' ? true : false }
         else Proc.new {|x| x }
